@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Phase 1 · Efficiency — Claude Playbook</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="page-wrap">
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="firm">Adonis Chu CPA & Associates Limited</div>
+      <div class="project">Claude Playbook Dashboard</div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="sidebar-section">Navigation</div>
+      <a href="index.html"><span class="nav-icon">⬛</span> Overview</a>
+      <div class="sidebar-section">Phases</div>
+      <a href="phase1.html" class="active"><span class="nav-icon">⚡</span> Phase 1 · Efficiency</a>
+      <a href="phase2.html"><span class="nav-icon">📊</span> Phase 2 · Visualisation</a>
+      <a href="phase3.html"><span class="nav-icon">📣</span> Phase 3 · Acquisition</a>
+      <div class="sidebar-section">Jump to</div>
+      <a href="#professional"><span class="nav-icon">📋</span> Professional work</a>
+      <a href="#admin"><span class="nav-icon">🗂️</span> Administrative work</a>
+      <a href="#ops-detail"><span class="nav-icon">🔧</span> All operations</a>
+    </nav>
+    <div class="sidebar-footer">Last updated: <span class="updated" id="sb-updated">—</span></div>
+  </aside>
+
+  <main class="main">
+    <header class="phase-hero">
+      <div class="eyebrow">Phase 1 · Now</div>
+      <h1>⚡ Efficiency</h1>
+      <div class="subtitle">Cut time cost and raise quality — accuracy and completeness — across all existing delivery work.</div>
+      <div class="meta">
+        <div class="meta-item"><div class="ml">Target date</div><div class="mv" id="p1-target">—</div></div>
+        <div class="meta-item"><div class="ml">Status</div><div class="mv" id="p1-status">—</div></div>
+        <div class="meta-item"><div class="ml">Progress</div><div class="mv" id="p1-progress">—</div></div>
+        <div class="meta-item"><div class="ml">Operations</div><div class="mv" id="p1-opcount">—</div></div>
+      </div>
+    </header>
+
+    <div class="content">
+
+      <!-- Progress bar -->
+      <div class="card mb-32">
+        <div class="flex-between mb-8">
+          <span class="text-sm text-muted">Overall Phase 1 progress</span>
+          <span class="text-sm text-green" id="p1-pct-label">0%</span>
+        </div>
+        <div class="progress-bar-wrap">
+          <div class="progress-bar" id="p1-bar" style="width:0%"></div>
+        </div>
+        <div class="mt-8 text-sm text-muted">Principle: <strong style="color:var(--txt)">Claude drafts to a review-ready standard. The CPA's review and sign-off are unchanged.</strong></div>
+      </div>
+
+      <!-- Professional work -->
+      <div class="section-title" id="professional">Professional Work</div>
+      <p class="text-muted text-sm mb-16">Service-delivery outputs — drafted by Claude, then reviewed and approved by Adonis.</p>
+      <div class="card-grid card-grid-2 mb-32" id="prof-grid"></div>
+
+      <!-- Admin work -->
+      <div class="section-title" id="admin">Administrative Work</div>
+      <p class="text-muted text-sm mb-16">Lower regulatory risk — good place for early pilots and quick wins.</p>
+      <div class="card-grid card-grid-2 mb-32" id="admin-grid"></div>
+
+      <!-- Ethics strip -->
+      <div class="card mb-32" style="background:var(--green-lt);border-color:var(--green)">
+        <div class="section-title" style="color:var(--green-dk)">Item 2 guardrails — always apply</div>
+        <div class="card-grid card-grid-2 mt-8">
+          <div>
+            <strong style="font-size:13px;color:var(--green-dk)">HKICPA Code (Rev. 12/2024)</strong>
+            <ul style="font-size:13px;color:var(--muted);padding-left:18px;margin-top:6px;line-height:1.7">
+              <li>Minimise & redact client data before sharing with Claude</li>
+              <li>Verify every output before relying on it</li>
+              <li>Professional skepticism — no unchecked reliance on AI</li>
+              <li>Adonis signs all regulated output</li>
+            </ul>
+          </div>
+          <div>
+            <strong style="font-size:13px;color:var(--green-dk)">AML / TCSP (AMLO Cap. 615)</strong>
+            <ul style="font-size:13px;color:var(--muted);padding-left:18px;margin-top:6px;line-height:1.7">
+              <li>AI may draft CDD only; identity verified against independent sources</li>
+              <li>File outputs in firm systems — AI chat is not the record</li>
+              <li>Sanctions / PEP screening stays a controlled firm process</li>
+              <li>Never input STR / suspicious-transaction matters into AI</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- All operations detail -->
+      <div class="section-title" id="ops-detail">All Phase 1 Operations</div>
+      <div class="card mb-32" style="padding:0;overflow:hidden">
+        <table class="ops-table">
+          <thead>
+            <tr>
+              <th>Operation</th>
+              <th>Tool</th>
+              <th>Time saved</th>
+              <th>Est. hrs</th>
+              <th>Actual hrs</th>
+              <th>Risk</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="ops-tbody"></tbody>
+        </table>
+      </div>
+
+      <div class="scripture">"Whatever your hand finds to do, do it with all your might." · Ecclesiastes 9:10</div>
+    </div>
+  </main>
+</div>
+
+<script>
+const PROF_CATS = [
+  { key: 'Audit', icon: '🔍', items: ['Proforma FS review, lead schedules, working papers, completion memo'] },
+  { key: 'Accounting', icon: '🧾', items: ['GL reconstruction, Xero CSV imports, bank reconciliation, year-end journals'] },
+  { key: 'Tax', icon: '📑', items: ['Profits tax computations, depreciation / disposal schedules, employer\'s returns'] },
+  { key: 'Company Secretarial', icon: '🏢', items: ['Minutes, resolutions, statutory forms, CDD documentation (verify by hand)'] },
+];
+const ADMIN_CATS = [
+  { key: 'Client communication', icon: '💬', items: ['Bilingual emails & WhatsApp, reminders, engagement & fee letters'] },
+  { key: 'Document handling', icon: '📂', items: ['Extract data from PDFs / scans, summarise, organise working files'] },
+  { key: 'Knowledge & SOPs', icon: '📚', items: ['Turn recurring processes into reusable prompts, skills & templates'] },
+  { key: 'Practice admin', icon: '🗒️', items: ['Meeting notes, proposals, regulatory-update summaries, deadline lists'] },
+];
+
+function renderCatCards(cats, containerId) {
+  document.getElementById(containerId).innerHTML = cats.map(c => `
+    <div class="card">
+      <div style="font-size:22px;margin-bottom:8px">${c.icon}</div>
+      <div style="font-family:var(--font-serif);font-size:17px;color:var(--green-dk);font-weight:700;margin-bottom:8px">${c.key}</div>
+      <ul style="font-size:13px;color:var(--muted);padding-left:18px;line-height:1.7">
+        ${c.items.map(i => `<li>${i}</li>`).join('')}
+      </ul>
+    </div>
+  `).join('');
+}
+
+function statusBadge(s) {
+  const map = { 'not-started': 'Not started', 'in-progress': 'In progress', 'done': 'Done' };
+  return `<span class="badge badge-${s}">${map[s] || s}</span>`;
+}
+function timeCls(t) { return t === 'High' ? 'time-high' : t === 'Med' ? 'time-med' : ''; }
+function riskBadge(r) { return `<span class="risk-badge risk-${r.toLowerCase()}">${r}</span>`; }
+
+async function init() {
+  const res = await fetch('data.json?v=' + Date.now());
+  const DATA = await res.json();
+
+  const ph = DATA.phases.find(p => p.id === 1);
+  document.getElementById('p1-target').textContent = ph.targetDate;
+  document.getElementById('p1-status').innerHTML = `<span class="badge badge-${ph.status}">${ph.status}</span>`;
+  document.getElementById('p1-progress').textContent = ph.progress + '%';
+  document.getElementById('sb-updated').textContent = DATA.project.lastUpdated;
+
+  const ops1 = DATA.operations.filter(o => o.phase === 1);
+  document.getElementById('p1-opcount').textContent = ops1.length;
+  document.getElementById('p1-pct-label').textContent = ph.progress + '%';
+  document.getElementById('p1-bar').style.width = ph.progress + '%';
+
+  renderCatCards(PROF_CATS, 'prof-grid');
+  renderCatCards(ADMIN_CATS, 'admin-grid');
+
+  document.getElementById('ops-tbody').innerHTML = ops1.map((op, i) => `
+    <tr onclick="toggleDetail(${i})" style="cursor:pointer">
+      <td><div class="op-name">${op.name}</div></td>
+      <td><code style="font-size:12px;color:var(--muted)">${op.tool}</code></td>
+      <td class="${timeCls(op.timeSaved)}">${op.timeSaved}</td>
+      <td>${op.estimatedHoursSaved ? op.estimatedHoursSaved + 'h' : '—'}</td>
+      <td>${op.actualHoursSaved !== null ? '<span class="hours-actual">' + op.actualHoursSaved + 'h</span>' : '<span class="hours-null">pending</span>'}</td>
+      <td>${riskBadge(op.risk)}</td>
+      <td>${statusBadge(op.status)}</td>
+    </tr>
+    <tr class="op-detail-row" id="detail-${i}">
+      <td colspan="7" class="op-detail-cell">
+        <div class="op-detail-inner">
+          <div class="detail-block"><h4>📝 Notes</h4><p>${op.notes || '—'}</p></div>
+          <div class="detail-block"><h4>⚙️ Conditions</h4><p>${op.conditions || '—'}</p></div>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function toggleDetail(i) {
+  document.getElementById('detail-' + i).classList.toggle('open');
+}
+
+init();
+</script>
+</body>
+</html>

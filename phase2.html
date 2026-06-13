@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Phase 2 · Data Visualisation — Claude Playbook</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="page-wrap">
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="firm">Adonis Chu CPA & Associates Limited</div>
+      <div class="project">Claude Playbook Dashboard</div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="sidebar-section">Navigation</div>
+      <a href="index.html"><span class="nav-icon">⬛</span> Overview</a>
+      <div class="sidebar-section">Phases</div>
+      <a href="phase1.html"><span class="nav-icon">⚡</span> Phase 1 · Efficiency</a>
+      <a href="phase2.html" class="active"><span class="nav-icon">📊</span> Phase 2 · Visualisation</a>
+      <a href="phase3.html"><span class="nav-icon">📣</span> Phase 3 · Acquisition</a>
+    </nav>
+    <div class="sidebar-footer">Last updated: <span id="sb-updated">—</span></div>
+  </aside>
+
+  <main class="main">
+    <header class="phase-hero" style="background:#1B6E8C">
+      <div class="eyebrow">Phase 2 · Next</div>
+      <h1>📊 Data Visualisation</h1>
+      <div class="subtitle">Dashboards and exception reports so management can see WIP, deadlines and capacity at a glance.</div>
+      <div class="meta">
+        <div class="meta-item"><div class="ml">Target date</div><div class="mv" id="p2-target">—</div></div>
+        <div class="meta-item"><div class="ml">Status</div><div class="mv" id="p2-status">—</div></div>
+        <div class="meta-item"><div class="ml">Pre-requisite</div><div class="mv">Phase 1 embedded</div></div>
+      </div>
+    </header>
+
+    <div class="content">
+
+      <div class="card mb-32" style="background:var(--amber-lt);border-color:var(--amber)">
+        <strong style="color:var(--amber);font-size:13px">⏳ Phase 2 starts after Phase 1 is embedded.</strong>
+        <p class="text-sm text-muted mt-8">The freed capacity from Phase 1 efficiency gains must be measurable before Phase 2 tooling is worth building. Use the Phase 1 dashboard to confirm pilots are stable and owners are assigned before activating this phase.</p>
+      </div>
+
+      <div class="section-title">What Phase 2 delivers</div>
+      <div class="card-grid card-grid-2 mb-32">
+        <div class="card">
+          <div style="font-size:22px;margin-bottom:8px">📋</div>
+          <div style="font-family:var(--font-serif);font-size:17px;color:var(--green-dk);font-weight:700;margin-bottom:8px">WIP & deadline dashboard</div>
+          <p class="text-sm text-muted">Partner can see all engagements, outstanding items, legal deadlines (NAR1, PTR, Employer's Return) and staff capacity — without asking anyone.</p>
+        </div>
+        <div class="card">
+          <div style="font-size:22px;margin-bottom:8px">⚠️</div>
+          <div style="font-family:var(--font-serif);font-size:17px;color:var(--green-dk);font-weight:700;margin-bottom:8px">Exception reports</div>
+          <p class="text-sm text-muted">Weekly briefing flags only what needs attention — engagements over budget, CDD incomplete, deadlines within 30 days, completed-but-not-billed work.</p>
+        </div>
+        <div class="card">
+          <div style="font-size:22px;margin-bottom:8px">💰</div>
+          <div style="font-family:var(--font-serif);font-size:17px;color:var(--green-dk);font-weight:700;margin-bottom:8px">Recoverability & WIP</div>
+          <p class="text-sm text-muted">Claude reads Xero billing data and flags where time cost exceeds the fee quoted — improving realisation and catch-up billing.</p>
+        </div>
+        <div class="card">
+          <div style="font-size:22px;margin-bottom:8px">🔗</div>
+          <div style="font-family:var(--font-serif);font-size:17px;color:var(--green-dk);font-weight:700;margin-bottom:8px">Odoo Projects integration</div>
+          <p class="text-sm text-muted">Connect Claude to Odoo Projects via MCP. Live WIP, deadlines and task status feed automatically into the management view — no manual updates.</p>
+        </div>
+      </div>
+
+      <div class="section-title">Odoo connection — 4 steps</div>
+      <div class="card mb-32">
+        <ol style="padding-left:20px;font-size:14px;line-height:2;color:var(--txt)">
+          <li>Confirm Odoo hosting type (Online / .sh / on-prem) and enable API key access</li>
+          <li>Choose connector route: hosted MCP (e.g. Pantalytics — free beta) or open-source self-host (free)</li>
+          <li>Add connector in Claude Settings and authorise via OAuth</li>
+          <li>Start read-only on Odoo Projects; widen to Contacts & Documents after review</li>
+        </ol>
+        <div class="mt-24 text-sm text-muted" style="border-top:1px solid var(--border);padding-top:12px">
+          Anthropic / Claude: no extra fee. Odoo subscription already paid for two years. Connector cost: free–€99 one-off.<br>
+          <em>Pricing as at Jun 2026 — confirm current terms before committing.</em>
+        </div>
+      </div>
+
+      <div class="section-title">Future Odoo modules — client experience</div>
+      <div class="card-grid card-grid-2 mb-32">
+        <div class="card">
+          <div style="font-size:22px;margin-bottom:8px">🤖</div>
+          <div style="font-family:var(--font-serif);font-size:17px;color:var(--green-dk);font-weight:700;margin-bottom:8px">AI client chatbot</div>
+          <p class="text-sm text-muted">Odoo Website + Live Chat. Claude-powered, bilingual, 24/7. Answers FAQs, captures and triages enquiries.</p>
+          <div class="mt-8"><span class="badge badge-pending">Pending Phase 2+</span></div>
+        </div>
+        <div class="card">
+          <div style="font-size:22px;margin-bottom:8px">🖥️</div>
+          <div style="font-family:var(--font-serif);font-size:17px;color:var(--green-dk);font-weight:700;margin-bottom:8px">Client self-service portal</div>
+          <p class="text-sm text-muted">Odoo Portal + Project. Clients track delegated assignments, deadlines and documents. Claude drafts plain-language updates.</p>
+          <div class="mt-8"><span class="badge badge-pending">Pending Phase 2+</span></div>
+        </div>
+        <div class="card">
+          <div style="font-size:22px;margin-bottom:8px">✍️</div>
+          <div style="font-family:var(--font-serif);font-size:17px;color:var(--green-dk);font-weight:700;margin-bottom:8px">e-Signature & approvals</div>
+          <p class="text-sm text-muted">Odoo Sign. Engagement letters, FS approvals and minutes — Claude drafts, Odoo routes and time-stamps.</p>
+          <div class="mt-8"><span class="badge badge-pending">Pending Phase 2+</span></div>
+        </div>
+        <div class="card">
+          <div style="font-size:22px;margin-bottom:8px">🎧</div>
+          <div style="font-family:var(--font-serif);font-size:17px;color:var(--green-dk);font-weight:700;margin-bottom:8px">Helpdesk & online booking</div>
+          <p class="text-sm text-muted">Odoo Helpdesk + Appointments. Client queries become tracked tickets; Claude triages. Clients self-book meetings.</p>
+          <div class="mt-8"><span class="badge badge-pending">Pending Phase 2+</span></div>
+        </div>
+      </div>
+
+      <div class="scripture">"Whatever your hand finds to do, do it with all your might." · Ecclesiastes 9:10</div>
+    </div>
+  </main>
+</div>
+<script>
+async function init() {
+  const res = await fetch('data.json?v=' + Date.now());
+  const DATA = await res.json();
+  const ph = DATA.phases.find(p => p.id === 2);
+  document.getElementById('p2-target').textContent = ph.targetDate;
+  document.getElementById('p2-status').innerHTML = `<span class="badge badge-${ph.status}">${ph.status}</span>`;
+  document.getElementById('sb-updated').textContent = DATA.project.lastUpdated;
+}
+init();
+</script>
+</body>
+</html>
