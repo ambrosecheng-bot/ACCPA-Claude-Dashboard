@@ -656,7 +656,12 @@ async function loadAllTasks() {
     TASKS_CACHE = {};
     data.forEach(t => {
       if (!TASKS_CACHE[t.phase_id]) TASKS_CACHE[t.phase_id] = [];
-      TASKS_CACHE[t.phase_id].push({ id: t.id, date: t.date, task: t.task });
+      TASKS_CACHE[t.phase_id].push({
+        id:       t.id,
+        date:     t.date,
+        task:     t.task,
+        added_by: t.added_by || '',
+      });
     });
     // Sync to localStorage
     [1,2,3].forEach(pid => {
@@ -689,14 +694,22 @@ function saveTasksForPhase(phaseId, tasks) {
   try { localStorage.setItem(`phase_tasks_${phaseId}`, JSON.stringify(tasks)); } catch(e) {}
 }
 
+// ── Date helpers ───────────────────────────────────────────
+function fromInputDate(val) {
+  if (!val) return '';
+  const d = new Date(val + 'T00:00:00');
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+}
+
 async function addTask(phaseId) {
   const dateEl   = document.getElementById(`new-task-date-${phaseId}`);
   const taskEl   = document.getElementById(`new-task-name-${phaseId}`);
   const memberEl = document.getElementById(`new-task-member-${phaseId}`);
-  const date     = dateEl.value.trim();
+  const date     = fromInputDate(dateEl.value);
   const task     = taskEl.value.trim();
   const added_by = memberEl ? memberEl.value : '';
-  if (!date || !task) { alert('Please enter both a date and a task description.'); return; }
+  if (!dateEl.value || !task) { alert('Please select a date and enter a task description.'); return; }
 
   const btn = document.querySelector(`#tasks-section-${phaseId} button`);
   if (btn) { btn.textContent = 'Saving…'; btn.disabled = true; }
@@ -708,10 +721,12 @@ async function addTask(phaseId) {
 
   let newTask = { date, task, added_by };
   if (!error && inserted && inserted.length > 0) {
-    newTask = { id: inserted[0].id, date, task, added_by };
+    newTask = { id: inserted[0].id, date, task, added_by: inserted[0].added_by || added_by };
+  } else if (error) {
+    console.warn('phase_tasks insert failed:', error.message);
   }
 
-  // Update cache & localStorage
+  // Update cache & localStorage regardless
   const tasks = getTasksForPhase(phaseId);
   tasks.push(newTask);
   saveTasksForPhase(phaseId, tasks);
@@ -719,9 +734,19 @@ async function addTask(phaseId) {
   dateEl.value = '';
   taskEl.value = '';
   if (memberEl) memberEl.value = '';
-  renderTasksTable(phaseId);
 
-  if (btn) { btn.textContent = '+ Add'; btn.disabled = false; }
+  // Show feedback on button
+  if (btn) {
+    btn.textContent = error ? '✓ Saved locally' : '✓ Saved';
+    btn.style.background = error ? '#C8860A' : '#16A34A';
+    btn.disabled = false;
+    setTimeout(() => {
+      btn.textContent = '+ Add';
+      btn.style.background = '';
+    }, 1800);
+  }
+
+  renderTasksTable(phaseId);
 }
 
 async function updateTaskField(phaseId, rowIndex, field, value) {
@@ -746,16 +771,38 @@ function renderTasksTable(phaseId) {
     .map(m => `<option value="${m}" ${m===sel?'selected':''}>${m||'— select —'}</option>`)
     .join('');
 
+  // Format stored date string to YYYY-MM-DD for <input type="date">
+  function toInputDate(str) {
+    if (!str) return '';
+    if (/^\d{4}-\d{2}-\d{2}$/.test(str)) return str;
+    // Strip weekday — handles "15 Jun 2026 (Mon)", "15 Jun 2026, Monday", etc.
+    const clean = str.replace(/\s*[,(].*/, '').trim();
+    const d = new Date(clean);
+    if (!isNaN(d)) return d.toISOString().slice(0,10);
+    return '';
+  }
+
+  // Format YYYY-MM-DD back to "15 Jun 2026 (Mon)" for display/storage
+  function fromInputDate(val) {
+    if (!val) return '';
+    const d = new Date(val + 'T00:00:00');
+    const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()} (${days[d.getDay()]})`;
+  }
+
   const rows = tasks.map((t, i) => `
     <tr style="border-bottom:1px solid var(--border);background:${i%2===0?'transparent':'var(--green-tint)'}">
       <td style="padding:4px 8px 4px 0;vertical-align:middle;width:175px">
-        <input
-          value="${(t.date||'').replace(/"/g,'&quot;')}"
-          onchange="updateTaskField(${phaseId},${i},'date',this.value)"
-          style="width:100%;border:1px solid transparent;border-radius:5px;padding:4px 7px;font-size:12.5px;color:var(--muted);background:transparent;font-family:inherit;cursor:text"
+        <input type="date"
+          value="${toInputDate(t.date)}"
+          onchange="updateTaskField(${phaseId},${i},'date',fromInputDate(this.value))"
+          style="width:100%;border:1px solid transparent;border-radius:5px;padding:4px 7px;
+                 font-size:12.5px;color:var(--muted);background:transparent;
+                 font-family:inherit;cursor:pointer"
           onfocus="this.style.borderColor='var(--green)';this.style.background='var(--card)'"
           onblur="this.style.borderColor='transparent';this.style.background='transparent'"
-          title="Click to edit date">
+          title="Click to pick date">
       </td>
       <td style="padding:4px 8px;vertical-align:middle">
         <input
@@ -796,9 +843,8 @@ function renderTasksTable(phaseId) {
     </table>
     <!-- Add row -->
     <div style="display:flex;gap:8px;margin-top:12px;align-items:center">
-      <input id="new-task-date-${phaseId}" type="text" placeholder="e.g. 15 Jun 2026 (Mon)"
-        style="width:175px;border:1px solid var(--border);border-radius:6px;padding:6px 10px;font-size:12.5px;font-family:inherit;color:var(--txt);background:var(--bg)"
-        onkeydown="if(event.key==='Enter')addTask(${phaseId})">
+      <input id="new-task-date-${phaseId}" type="date"
+        style="width:175px;border:1px solid var(--border);border-radius:6px;padding:6px 10px;font-size:12.5px;font-family:inherit;color:var(--txt);background:var(--bg);cursor:pointer">
       <input id="new-task-name-${phaseId}" type="text" placeholder="Task description…"
         style="flex:1;border:1px solid var(--border);border-radius:6px;padding:6px 10px;font-size:12.5px;font-family:inherit;color:var(--txt);background:var(--bg)"
         onkeydown="if(event.key==='Enter')addTask(${phaseId})">
